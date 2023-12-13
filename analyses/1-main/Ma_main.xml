@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beast beautitemplate='Standard' beautistatus='' 
+	   namespace="beast.core
+	   			  :beast.evolution.alignment
+	   			  :beast.evolution.tree.coalescent
+	   			  :beast.core.util
+	   			  :beast.evolution.nuc
+	   			  :beast.evolution.operators
+	   			  :beast.evolution.sitemodel
+	   			  :beast.evolution.substitutionmodel
+	   			  :beast.evolution.likelihood
+	   			  :skylinetools.util
+	   			  :feast:feast.expressions" 
+	   required="" version="2.6">
+
+
+<!-- Initial alignments -->
+
+<data id="L1-alignment-original" 
+	  spec="feast.fileio.AlignmentFromFasta" 
+	  fileName = "L1_Malawi_196_1234.fasta"
+  	  name="alignment">
+</data>
+
+<data id="L2-alignment-original" 
+	  spec="feast.fileio.AlignmentFromFasta" 
+	  fileName = "L2_Malawi_45_1234.fasta"
+  	  name="alignment">
+</data>
+
+<data id="L3-alignment-original" 
+	  spec="feast.fileio.AlignmentFromFasta" 
+	  fileName = "L3_Malawi_150_1234.fasta"
+  	  name="alignment">
+</data>
+
+<data id="L4-alignment-original" 
+	  spec="feast.fileio.AlignmentFromFasta" 
+	  fileName = "L4_Malawi_400_1234.fasta"
+  	  name="alignment">
+</data>
+
+<!-- Ascertainment bias corrected alignments -->
+
+<data id="L1-alignment" 
+	  spec='FilteredAlignment' 
+	  filter='-' 
+	  data='@L1-alignment-original' 
+	  constantSiteWeights="757433 1446619 1441154 757293">
+</data>
+
+<data id="L2-alignment" 
+	  spec='FilteredAlignment' 
+	  filter='-' 
+	  data='@L2-alignment-original' 
+	  constantSiteWeights="758246 1449917 1444522 758108">
+</data>
+
+<data id="L3-alignment" 
+	  spec='FilteredAlignment' 
+	  filter='-' 
+	  data='@L3-alignment-original' 
+	  constantSiteWeights="758069 1449170 1443765 757926">
+</data>
+
+<data id="L4-alignment" 
+	  spec='FilteredAlignment' 
+	  filter='-' 
+	  data='@L4-alignment-original' 
+	  constantSiteWeights="756050 1443776 1438349 1438349">
+</data>
+
+<!-- Sampling dates -->
+
+<typeTrait id="dateTraitSet.L1" spec="feast.fileio.TraitSetFromTaxonSet" 
+		   dateFormat="dd-M-yyyy" traitname="date" 
+           delimiter= "/"  
+           takeGroup="1">		
+ 		<taxa id="TaxonSet.L1" spec="TaxonSet">
+			<alignment idref="L1-alignment"/>
+        </taxa>
+</typeTrait>   
+
+<typeTrait id="dateTraitSet.L2" spec="feast.fileio.TraitSetFromTaxonSet" 
+		   dateFormat="dd-M-yyyy" traitname="date" 
+           delimiter= "/"  
+           takeGroup="1">		
+ 		<taxa id="TaxonSet.L2" spec="TaxonSet">
+			<alignment idref="L2-alignment"/>
+        </taxa>
+</typeTrait>  
+
+<typeTrait id="dateTraitSet.L3" spec="feast.fileio.TraitSetFromTaxonSet" 
+		   dateFormat="dd-M-yyyy" traitname="date" 
+           delimiter= "/"  
+           takeGroup="1">		
+ 		<taxa id="TaxonSet.L3" spec="TaxonSet">
+			<alignment idref="L3-alignment"/>
+        </taxa>
+</typeTrait>  
+
+<typeTrait id="dateTraitSet.L4" spec="feast.fileio.TraitSetFromTaxonSet" 
+		   dateFormat="dd-M-yyyy" traitname="date" 
+           delimiter= "/"  
+           takeGroup="1">		
+ 		<taxa id="TaxonSet.L4" spec="TaxonSet">
+			<alignment idref="L4-alignment"/>
+        </taxa>
+</typeTrait>  
+
+<typeTrait id="typeTraitSet.L1" spec="feast.fileio.TraitSetFromTaxonSet" 
+		   traitname="type" 
+           delimiter= "/"   
+           everythingAfterLast="true">
+	 <taxa idref="TaxonSet.L1" />
+</typeTrait>
+
+<typeTrait id="typeTraitSet.L2" spec="feast.fileio.TraitSetFromTaxonSet" 
+		   traitname="type" 
+           delimiter= "/"   
+           everythingAfterLast="true">
+	 <taxa idref="TaxonSet.L2" />
+</typeTrait>
+
+<typeTrait id="typeTraitSet.L3" spec="feast.fileio.TraitSetFromTaxonSet" 
+		   traitname="type" 
+           delimiter= "/"   
+           everythingAfterLast="true">
+	 <taxa idref="TaxonSet.L3" />
+</typeTrait>
+
+<typeTrait id="typeTraitSet.L4" spec="feast.fileio.TraitSetFromTaxonSet" 
+		   traitname="type" 
+           delimiter= "/"   
+           everythingAfterLast="true">
+	 <taxa idref="TaxonSet.L4" />
+</typeTrait>   
+
+
+
+<!-- Map elements -->
+
+<map name="Uniform" >beast.math.distributions.Uniform</map>
+<map name="Exponential" >beast.math.distributions.Exponential</map>
+<map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map>
+<map name="Normal" >beast.math.distributions.Normal</map>
+<map name="Beta" >beast.math.distributions.Beta</map>
+<map name="Gamma" >beast.math.distributions.Gamma</map>
+<map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
+<map name="prior" >beast.math.distributions.Prior</map>
+<map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
+<map name="OneOnX" >beast.math.distributions.OneOnX</map>
+
+
+
+
+<parameter id="geo-frequencies" spec="parameter.RealParameter" dimension="2" estimate="false" lower="0.0" name="frequencies" upper="1.0">1.0 0.0</parameter>
+<parameter id="birthRateAmongDemesChangeTimes" spec="parameter.RealParameter" dimension="4" estimate="false" name="birthRateAmongDemesChangeTimes">0 6 18 25</parameter>
+<parameter id="birthRateChangeTimes" spec="parameter.RealParameter" dimension="4" estimate="false" name="birthRateChangeTimes">0 6 18 25</parameter>  
+<parameter id="deathRateChangeTimes" spec="parameter.RealParameter" dimension="4" estimate="false" name="deathRateChangeTimes">0 6 18 25</parameter>  
+<parameter id="mutationRate" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>                    
+<parameter id="proportionInvariant" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+<parameter id="rateCT" spec="parameter.RealParameter" estimate="false" lower="0.0" name="rateCT">1.0</parameter>
+<parameter id="rateMatrix" spec="parameter.RealParameter" estimate="false" dimension="2" lower="0.0" name="migrationMatrix">0.0 0.0</parameter>
+<parameter id="becomeUninfectiousRate_HIVneg" spec="parameter.RealParameter" dimension="1" lower="0.0" upper="2" estimate="false">1.0</parameter>
+
+
+
+<R0 id="R0WithinDemes_scaled" spec="feast.expressions.ExpCalculator">
+        <![CDATA[
+    		R0_within_HIVneg * {1,0.92,0.84,0.90, 0,f1*f2*0.08,f1*f2*0.16,f1*f2*0.10} 
+        	]]>
+    	<arg idref="R0_within_HIVneg"/>
+    	<arg idref="f1"/>  
+        <arg idref="f2"/>
+</R0>  
+                
+<R0AmongDemes id="R0AmongDemes_scaled" spec="feast.expressions.ExpCalculator" >
+        <![CDATA[
+              R0_within_HIVneg * {0,f2*0.08,f2*0.16,f2*0.10, 0,f1*0.92,f1*0.84,f1*0.90}
+             ]]>
+        <arg idref="R0_within_HIVneg"/>
+        <arg idref="f1"/>   
+        <arg idref="f2"/>                           
+</R0AmongDemes>  
+                
+<becomeUninfectiousRate id="becomeUninfectiousRate_scaled" spec="feast.expressions.ExpCalculator">
+        <![CDATA[
+             becomeUninfectiousRate_HIVneg *
+              {1,1,1,1, 0,f3,f3,f3}
+             ]]>
+        <arg idref="becomeUninfectiousRate_HIVneg"/>
+        <arg idref="f3"/>                           
+</becomeUninfectiousRate>  
+
+            	
+<LogNormal id="LogNormalDistributionModel.clock" name="distr" meanInRealSpace="false">
+    <parameter id="RealParameter.1" spec="parameter.RealParameter" estimate="false" name="M">-16</parameter>
+    <parameter id="RealParameter.2" spec="parameter.RealParameter" estimate="false" name="S">1.0</parameter>        
+</LogNormal>        
+   
+<Exponential id="Exponential.gamma" name="distr">
+    <parameter id="RealParameter.3" spec="parameter.RealParameter" estimate="false" name="mean">1.0</parameter>
+</Exponential>
+
+<Gamma id="Gamma.rateAC" name="distr">
+    <parameter id="RealParameter.4" spec="parameter.RealParameter" estimate="false" name="alpha">0.05</parameter>
+    <parameter id="RealParameter.5" spec="parameter.RealParameter" estimate="false" name="beta">10.0</parameter>
+</Gamma>
+            
+<Gamma id="Gamma.rateAG" name="distr">
+    <parameter id="RealParameter.6" spec="parameter.RealParameter" estimate="false" name="alpha">0.05</parameter>
+    <parameter id="RealParameter.7" spec="parameter.RealParameter" estimate="false" name="beta">20.0</parameter>
+</Gamma>                       
+
+<Uniform id="Uniform.origin" name="distr" lower="0" upper="1000"/>
+
+
+
+
+<!-- MCMC -->
+
+<!-- types: HIV-, HIV+ -->
+
+<run id="mcmc" spec="MCMC" chainLength="1000000000" numInitializationAttempts="1000" sampleFromPrior='false'>
+
+	<!-- State -->
+    
+    <state id="state" spec="State" storeEvery="1000">
+
+	
+		<plate var='n' range='1:4'>
+  
+  		<stateNode id="Tree.L$(n)" spec="beast.evolution.tree.RandomTree" taxa="@L$(n)-alignment">
+			<populationModel spec="beast.evolution.tree.coalescent.ConstantPopulation" popSize="1.0"/>
+			<trait idref="dateTraitSet.L$(n)"/>
+			<taxonset idref="TaxonSet.L$(n)"/>
+		</stateNode>
+	
+	    <parameter id="clockRate$(n)" spec="parameter.RealParameter" dimension="1" lower="0.0" upper="1E-4" name="stateNode">1E-6</parameter> 
+        <parameter id="gammaShape$(n)" spec="parameter.RealParameter" name="stateNode">1.0</parameter>
+  		<parameter id="rateAC$(n)" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="rateAG$(n)" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="rateAT$(n)" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="rateCG$(n)" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="rateGT$(n)" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="origin$(n)" spec="parameter.RealParameter" dimension="1" lower="0.0" upper="1000" name="stateNode">100</parameter> 
+        
+        </plate>
+
+        <parameter id="R0_within_HIVneg" spec="parameter.RealParameter" dimension="1" lower="0.0" name="stateNode">1.0</parameter>
+        <parameter id="samplingProportion1" spec="parameter.RealParameter" dimension="4" lower="0.0" upper="1.0" name="stateNode">0.0 0.19125 0.0 0.19125</parameter>
+        <parameter id="samplingProportion2" spec="parameter.RealParameter" dimension="4" lower="0.0" upper="1.0" name="stateNode">0.0 0.19125 0.0 0.19125</parameter>
+        <parameter id="samplingProportion3" spec="parameter.RealParameter" dimension="4" lower="0.0" upper="1.0" name="stateNode">0.0 0.19125 0.0 0.19125</parameter>
+        <parameter id="samplingProportion4" spec="parameter.RealParameter" dimension="4" lower="0.0" upper="1.0" name="stateNode">0.0 0.09375 0.0 0.09375</parameter>
+
+     	<parameter id="removalProbability" spec="parameter.RealParameter" lower="0" upper="1" dimension="2" name="stateNode">0.8 0.8</parameter>       
+     	<parameter id="f1" spec="parameter.RealParameter" lower = "0" name="stateNode">1.0</parameter>  
+     	<parameter id="f2" spec="parameter.RealParameter" lower = "0" name="stateNode">1.0</parameter>  
+     	<parameter id="f3" spec="parameter.RealParameter" lower = "0.1" upper = "10" name="stateNode">1.0</parameter>  
+    
+    </state>
+	
+	
+	
+	<!-- Posterior -->
+
+    <distribution id="posterior" spec="util.CompoundDistribution">
+    
+    	<!-- Prior -->
+
+        <distribution id="prior" spec="util.CompoundDistribution">
+        
+            <!-- Tree prior (MTBD) -->
+
+    		<plate var='n' range='1:4'>
+					
+				<distribution id="birthDeathMigration$(n)" spec="beast.evolution.speciation.BirthDeathMigrationModelUncoloured" checkRho="false" 
+					stateNumber="2" tiptypes="@typeTraitSet.L$(n)" tree="@Tree.L$(n)" origin="@origin$(n)" originIsRootEdge="false" conditionOnSurvival="true"
+					migrationMatrix="@rateMatrix" samplingProportion="@samplingProportion$(n)" removalProbability="@removalProbability"
+					frequencies="@geo-frequencies" birthRateAmongDemesChangeTimes="@birthRateAmongDemesChangeTimes" birthRateChangeTimes="@birthRateChangeTimes"
+					deathRateChangeTimes="@deathRateChangeTimes"
+					R0="@R0WithinDemes_scaled" R0AmongDemes="@R0AmongDemes_scaled" becomeUninfectiousRate="@becomeUninfectiousRate_scaled">
+					<samplingRateChangeTimes spec="skylinetools.util.TreeSlicer" id="SamplingTreeSlice.L$(n)" tree="@Tree.L$(n)" dimension="2" to="oldestsample" inclusive="true"/> 
+				    <reverseTimeArrays spec="beast.core.parameter.BooleanParameter" value="true true true false false true"/>
+            	</distribution>
+
+		    </plate>
+
+            <prior id="R0_within_HIVneg_Prior" name="distribution" x="@R0_within_HIVneg">
+                <LogNormal id="LogNormalDistributionModel.1" name="distr">
+                    <parameter id="RealParameter.8" spec="parameter.RealParameter" estimate="false" name="M">0.0</parameter>
+                    <parameter id="RealParameter.9" spec="parameter.RealParameter" estimate="false" name="S" lower="0.0" upper="5.0">1.0</parameter>
+                </LogNormal>
+            </prior>
+ 
+			<prior id="f1Prior" name="distribution" x="@f1">
+                 <LogNormal id="LogNormalDistributionModel.2" name="distr">
+                    <parameter id="RealParameter.10" spec="parameter.RealParameter" estimate="false" name="M">0.0</parameter>
+                    <parameter id="RealParameter.11" spec="parameter.RealParameter" estimate="false" name="S" lower="0.0" upper="5.0">1.0</parameter>
+                </LogNormal>
+            </prior>
+
+			<prior id="f2Prior" name="distribution" x="@f2">
+                <LogNormal id="LogNormalDistributionModel.3" name="distr">
+                    <parameter id="RealParameter.12" spec="parameter.RealParameter" estimate="false" name="M">0.0</parameter>
+                    <parameter id="RealParameter.13" spec="parameter.RealParameter" estimate="false" name="S" lower="0.0" upper="5.0">1.0</parameter>
+                </LogNormal>
+            </prior>
+            
+            <prior id="f3Prior" name="distribution" x="@f3">
+                <LogNormal id="LogNormalDistributionModel.4" name="distr">
+                    <parameter id="RealParameter.14" spec="parameter.RealParameter" estimate="false" name="M">0.0</parameter>
+                    <parameter id="RealParameter.15" spec="parameter.RealParameter" estimate="false" name="S" lower="0.0" upper="5.0">0.5</parameter>
+                </LogNormal>
+            </prior>
+                    
+            <prior spec='beast.math.distributions.ExcludablePrior' id="samplingProportionPrior1" name="distribution" x="@samplingProportion1" xInclude="false true false true">
+                <Uniform id="Uniform.1.1" name="distr" lower="0.0" upper="0.255"/>
+            </prior>
+            
+            <prior spec='beast.math.distributions.ExcludablePrior' id="samplingProportionPrior2" name="distribution" x="@samplingProportion2" xInclude="false true false true">
+                <Uniform id="Uniform.1.2" name="distr" lower="0.0" upper="0.255"/>
+            </prior> 
+
+            <prior spec='beast.math.distributions.ExcludablePrior' id="samplingProportionPrior3" name="distribution" x="@samplingProportion3" xInclude="false true false true">
+                <Uniform id="Uniform.1.3" name="distr" lower="0.0" upper="0.255"/>
+            </prior>                            
+            
+            <prior spec='beast.math.distributions.ExcludablePrior' id="samplingProportionPrior4" name="distribution" x="@samplingProportion4" xInclude="false true false true">
+                <Uniform id="Uniform.1.4" name="distr" lower="0.0" upper="0.125"/>
+            </prior>   
+            
+        	<prior id="removalProbabilityPrior" name="distribution" x="@removalProbability">
+            	<Uniform id="Uniform.2" name="distr" lower="0" upper="1"/>
+            </prior>   
+                       
+           
+        <plate var='n' range='1:4'>
+            <prior id="ClockPrior$(n)" name="distribution" x="@clockRate$(n)" distr="@LogNormalDistributionModel.clock"/>
+            <prior id="GammaShapePrior$(n)" name="distribution" x="@gammaShape$(n)" distr="@Exponential.gamma"/>
+            <prior id="RateACPrior$(n)" name="distribution" x="@rateAC$(n)" distr="@Gamma.rateAC"/>
+            <prior id="RateAGPrior$(n)" name="distribution" x="@rateAG$(n)" distr="@Gamma.rateAG"/>
+            <prior id="RateATPrior$(n)" name="distribution" x="@rateAT$(n)" distr="@Gamma.rateAC"/>
+            <prior id="RateCGPrior$(n)" name="distribution" x="@rateCG$(n)" distr="@Gamma.rateAC"/>
+            <prior id="RateGTPrior$(n)" name="distribution" x="@rateGT$(n)" distr="@Gamma.rateAC"/>
+            <prior id="OriginPrior$(n)" name="distribution" x="@origin$(n)" distr="@Uniform.origin"/>      
+        </plate>
+                     
+        </distribution>
+        
+        
+        <!-- Tree likelihood -->
+        <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="true">
+        
+        <plate var='n' range='1:4'>
+            <distribution id="treeLikelihood$(n)" spec="ThreadedTreeLikelihood" data="@L$(n)-alignment" tree="@Tree.L$(n)">
+                <siteModel id="SiteModel$(n)" spec="SiteModel" gammaCategoryCount="4" shape="@gammaShape$(n)" mutationRate="@mutationRate" proportionInvariant="@proportionInvariant">
+                    <substModel id="gtr$(n)" spec="GTR" rateAC="@rateAC$(n)" rateAG="@rateAG$(n)" rateAT="@rateAT$(n)" rateCG="@rateCG$(n)" rateGT="@rateGT$(n)" rateCT="@rateCT">
+                        <frequencies id="empiricalFreqs$(n)" spec="Frequencies" data="@L$(n)-alignment"/>
+                    </substModel>
+                </siteModel>
+                <branchRateModel id="StrictClock$(n)" spec="beast.evolution.branchratemodel.StrictClockModel" clock.rate="@clockRate$(n)"/>                
+            </distribution>    
+        </plate>
+
+        </distribution>
+    </distribution>
+
+
+                       
+    <!-- Operators -->
+    
+    <!-- Substitution model operators -->
+    
+    <plate var='n' range='1:4'>
+    	<operator id="gammaShapeScaler$(n)" spec="ScaleOperator" parameter="@gammaShape$(n)" scaleFactor="0.5" weight="0.1"/>
+    	<operator id="RateACScaler$(n)" spec="ScaleOperator" parameter="@rateAC$(n)" scaleFactor="0.5" weight="0.1"/>
+    	<operator id="RateAGScaler$(n)" spec="ScaleOperator" parameter="@rateAG$(n)" scaleFactor="0.5" weight="0.1"/>
+    	<operator id="RateATScaler$(n)" spec="ScaleOperator" parameter="@rateAT$(n)" scaleFactor="0.5" weight="0.1"/>
+    	<operator id="RateCGScaler$(n)" spec="ScaleOperator" parameter="@rateCG$(n)" scaleFactor="0.5" weight="0.1"/>
+    	<operator id="RateGTScaler$(n)" spec="ScaleOperator" parameter="@rateGT$(n)" scaleFactor="0.5" weight="0.1"/>
+    </plate>
+
+	<!-- Clock model operators -->
+	
+    <operator id="StrictClockRateScaler1" spec="ScaleOperator" parameter="@clockRate1" weight="0.7433628"/>
+    <operator id="strictClockUpDownOperator1" spec="UpDownOperator" scaleFactor="0.75" weight="0.7433628">
+        <up idref="clockRate1"/>
+        <down idref="Tree.L1"/>
+    </operator>
+    
+    <operator id="StrictClockRateScaler2" spec="ScaleOperator" parameter="@clockRate2" weight="0.17067"/>
+    <operator id="strictClockUpDownOperator2" spec="UpDownOperator" scaleFactor="0.75" weight="0.17067">
+        <up idref="clockRate2"/>
+        <down idref="Tree.L2"/>
+    </operator>
+    
+    <operator id="StrictClockRateScaler3" spec="ScaleOperator" parameter="@clockRate3" weight="0.5689001"/>
+    <operator id="strictClockUpDownOperator3" spec="UpDownOperator" scaleFactor="0.75" weight="0.5689001">
+        <up idref="clockRate3"/>
+        <down idref="Tree.L3"/>
+    </operator>
+    
+    <operator id="StrictClockRateScaler4" spec="ScaleOperator" parameter="@clockRate4" weight="1.517067"/>
+    <operator id="strictClockUpDownOperator4" spec="UpDownOperator" scaleFactor="0.75" weight="1.517067">
+        <up idref="clockRate4"/>
+        <down idref="Tree.L4"/>
+    </operator>
+
+	<!-- Tree operators -->  <!--weights corrected by (number of samples per lineage)/(total number of samples) -->
+
+	<operator id="TreeScaler1" spec="ScaleOperator" scaleFactor="0.9" tree="@Tree.L1" weight="0.2477876"/>
+    <operator id="TreeRootScaler1" spec="ScaleOperator" rootOnly="true" scaleFactor="0.8" tree="@Tree.L1" weight="0.2477876"/>
+    <operator id="UniformOperator1" spec="Uniform" tree="@Tree.L1" weight="2.477876"/>
+    <operator id="SubtreeSlide1" spec="SubtreeSlide" tree="@Tree.L1" weight="0.9911504"/>
+    <operator id="Narrow1" spec="Exchange" tree="@Tree.L1" weight="1.238938"/>
+    <operator id="Wide1" spec="Exchange" isNarrow="false" tree="@Tree.L1" weight="0.7433628"/>
+    <operator id="WilsonBalding1" spec="WilsonBalding" tree="@Tree.L1" weight="0.7433628"/>
+    
+	<operator id="TreeScaler2" spec="ScaleOperator" scaleFactor="0.9" tree="@Tree.L2" weight="0.05689001"/>
+    <operator id="TreeRootScaler2" spec="ScaleOperator" rootOnly="true" scaleFactor="0.8" tree="@Tree.L2" weight="0.05689001"/>
+    <operator id="UniformOperator2" spec="Uniform" tree="@Tree.L2" weight="0.5689001"/>
+    <operator id="SubtreeSlide2" spec="SubtreeSlide" tree="@Tree.L2" weight="0.2275601"/>
+    <operator id="Narrow2" spec="Exchange" tree="@Tree.L2" weight="0.2844501"/>
+    <operator id="Wide2" spec="Exchange" isNarrow="false" tree="@Tree.L2" weight="0.17067"/>
+    <operator id="WilsonBalding2" spec="WilsonBalding" tree="@Tree.L2" weight="0.17067"/>
+    
+    <operator id="TreeScaler3" spec="ScaleOperator" scaleFactor="0.9" tree="@Tree.L3" weight="0.1896334"/>
+    <operator id="TreeRootScaler3" spec="ScaleOperator" rootOnly="true" scaleFactor="0.8" tree="@Tree.L3" weight="0.1896334"/>
+    <operator id="UniformOperator3" spec="Uniform" tree="@Tree.L3" weight="1.896334"/>
+    <operator id="SubtreeSlide3" spec="SubtreeSlide" tree="@Tree.L3" weight="0.7585335"/>
+    <operator id="Narrow3" spec="Exchange" tree="@Tree.L3" weight="0.9481669"/>
+    <operator id="Wide3" spec="Exchange" isNarrow="false" tree="@Tree.L3" weight="0.5689001"/>
+    <operator id="WilsonBalding3" spec="WilsonBalding" tree="@Tree.L3" weight="0.5689001"/>
+
+    <operator id="TreeScaler4" spec="ScaleOperator" scaleFactor="0.9" tree="@Tree.L4" weight="0.505689"/>
+    <operator id="TreeRootScaler4" spec="ScaleOperator" rootOnly="true" scaleFactor="0.8" tree="@Tree.L4" weight="0.505689"/>
+    <operator id="UniformOperator4" spec="Uniform" tree="@Tree.L4" weight="5.05689"/>
+    <operator id="SubtreeSlide4" spec="SubtreeSlide" tree="@Tree.L4" weight="2.022756"/>
+    <operator id="Narrow4" spec="Exchange" tree="@Tree.L4" weight="2.528445"/>
+    <operator id="Wide4" spec="Exchange" isNarrow="false" tree="@Tree.L4" weight="1.517067"/>
+    <operator id="WilsonBalding4" spec="WilsonBalding" tree="@Tree.L4" weight="1.517067"/>
+
+
+    <!-- MTBD operators -->
+    	
+    <operator id="samplingScaler1" spec="ScaleOperator" parameter="@samplingProportion1" scaleAll="true" scaleFactor="0.75" weight="0.4955752"/>
+	<operator id="samplingScaler2" spec="ScaleOperator" parameter="@samplingProportion2" scaleAll="true" scaleFactor="0.75" weight="0.11378"/>
+    <operator id="samplingScaler3" spec="ScaleOperator" parameter="@samplingProportion3" scaleAll="true" scaleFactor="0.75" weight="0.3792668"/>
+    <operator id="samplingScaler4" spec="ScaleOperator" parameter="@samplingProportion4" scaleAll="true" scaleFactor="0.75" weight="1.011378"/>
+
+    <operator id="OriginScaler1" scaleFactor="0.75" weight="1.238938" spec="ScaleOperator" parameter="@origin1"/>
+    <operator id="OriginScaler2" scaleFactor="0.75" weight="0.2844501" spec="ScaleOperator" parameter="@origin2"/>
+    <operator id="OriginScaler3" scaleFactor="0.75" weight="0.9481669" spec="ScaleOperator" parameter="@origin3"/>
+    <operator id="OriginScaler4" scaleFactor="0.75" weight="2.528445" spec="ScaleOperator" parameter="@origin4"/>
+    
+    <operator id="R0WithinScaler" spec="ScaleOperator" optimise="true" parameter="@R0_within_HIVneg" scaleFactor="0.8" weight="5.0"/>
+    <operator id="f1Scaler" spec="ScaleOperator" optimise="true" parameter="@f1" scaleFactor="0.75" weight="5.0"/>
+    <operator id="f2Scaler" spec="ScaleOperator" optimise="true" parameter="@f2" scaleFactor="0.75" weight="5.0"/>
+    <operator id="f3Scaler" spec="ScaleOperator" optimise="true" parameter="@f3" scaleFactor="0.75" weight="5.0"/>  
+    <operator id="removalProbabilityScaler" spec="ScaleOperator" parameter="@removalProbability" scaleAll="true" scaleFactor="0.5" weight="2.0"/>
+    
+    <operator id="updownf1f2f3" spec="UpDownOperator" scaleFactor="0.75" weight="5.0">
+        <up idref="f1"/>
+        <down idref="f2"/>
+        <down idref="f3"/>
+    </operator>
+ 
+
+
+    <logger id="tracelog" spec="Logger" fileName="$(filebase).log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+        <log idref="becomeUninfectiousRate_scaled"/>
+        <log idref="R0_within_HIVneg"/>
+    	<log idref="R0WithinDemes_scaled"/>
+        <log idref="R0AmongDemes_scaled"/>
+        <log idref="f1"/>
+    	<log idref="f2"/>
+        <log idref="f3"/>
+        <log idref="removalProbability"/>
+        
+        <plate var='n' range='1:4'>
+            <log idref="samplingProportion$(n)"/>
+        	<log id="TreeHeight$(n)" spec="beast.evolution.tree.TreeStatLogger" tree="@Tree.L$(n)" logHeight="false"/>
+	        <log idref="treeLikelihood$(n)"/>
+	        <log idref="origin$(n)"/>
+	        <log idref="clockRate$(n)"/>
+        	<log idref="gammaShape$(n)"/>
+        	<log idref="rateAC$(n)"/>
+        	<log idref="rateAG$(n)"/>
+        	<log idref="rateAT$(n)"/>
+        	<log idref="rateCG$(n)"/>
+        	<log idref="rateGT$(n)"/>
+        	<log idref="SamplingTreeSlice.L$(n)"/>
+        	<log spec="TreeSliceDateLogger" treeSlice="@SamplingTreeSlice.L$(n)"/>
+	    </plate>
+        
+    </logger>
+
+    <logger id="screenlog" spec="Logger" logEvery="1000">
+        <log idref="posterior"/>
+        <log idref="likelihood"/>
+        <log idref="prior"/>
+    </logger>
+
+    
+    
+    <plate var='n' range='1:4'>
+		<logger id="treelog$(n)" fileName="$(filebase).L$(n).trees" logEvery="10000" mode="tree">
+        	<log id="TreeWithMetaDataLogger$(n)" spec="beast.evolution.tree.TreeWithMetaDataLogger" tree="@Tree.L$(n)"/>
+    	</logger>
+	</plate>
+
+    <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
+
+</run>
+
+</beast>
+
+            
