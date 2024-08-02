@@ -1,5 +1,5 @@
 # Estimating the effects of HIV co-infection on *Mtb* transmission using phylodynamics
-This repository contains the code associated with the phylodynamic analyses performed in Windels et al. HIV co-infection is associated with reduced *Mycobacterium tuberculosis* transmissibility in sub-Saharan Africa (in prep) [https://doi.org/10.1101/2023.09.12.557301](https://doi.org/10.1101/2023.09.12.557301)
+This repository contains the code associated with the phylodynamic analyses performed in Windels et al. HIV co-infection is associated with reduced *Mycobacterium tuberculosis* transmissibility in sub-Saharan Africa. *PLOS Pathogens* 20, e1011675 (2024). [https://doi.org/10.1371/journal.ppat.1011675](https://doi.org/10.1371/journal.ppat.1011675)
 
 These analyses aimed at estimating the effect of HIV co-infection on the effective reproductive number for TB and the risk of developing active TB, by fitting a customized birth-death model to genomic sequencing data collected from TB patients in Malawi, South Africa, Tanzania, and Uganda.
 
