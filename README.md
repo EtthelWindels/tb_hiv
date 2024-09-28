@@ -11,4 +11,5 @@ The raw sequencing data used in this study are available under the following pro
 
 The repository is organized as follows:
 - The folder `analyses/` contains the XML files used for the birth-death analyses in BEAST2.
+- The folder `data/` contains all metadata.
 - The folder `scripts/` contains R scripts used for pre-processing of the alignments and post-processing of the BEAST2 output.
